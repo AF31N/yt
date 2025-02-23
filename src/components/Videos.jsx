@@ -1,24 +1,36 @@
 import React from "react";
-import { Stack, Box } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
+import VideoCard from "./VideoCard"; 
 
-import { ChannelCard, VideoCard } from "./";
+const Videos = ({ videos, direction = "row" }) => {
+  if (!videos?.length) {
+    return (
+      <Typography variant="body1" color="textSecondary" textAlign="center">
+        No videos available.
+      </Typography>
+    );
+  }
 
-const Videos = ({ videos, direction }) => {
   return (
     <Stack
-    direction={direction || "row"}
+      direction={direction}
       flexWrap="wrap"
       justifyContent="start"
-      alignItems="start"
-      gap={2}
+      gap={4}
+      sx={{ padding: "16px" }}
     >
-      {videos &&
-        videos.map((item, idx) => (
-          <Box key={idx}>
-            {item.id.videoId && <VideoCard video={item} />}
-            {item.id.channelId && <ChannelCard channelDetail={item} />}
+      {videos.map((video) => {
+        if (!video || !video.title) {
+          console.warn("Invalid video object:", video);
+          return null;
+        }
+
+        return (
+          <Box key={video.id} sx={{ width: { xs: "100%", sm: "48%", md: "31%", lg: "23%" } }}>
+            <VideoCard video={video} />
           </Box>
-        ))}
+        );
+      })}
     </Stack>
   );
 };

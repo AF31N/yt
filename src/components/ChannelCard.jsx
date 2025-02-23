@@ -1,42 +1,49 @@
-import React from 'react';
-import { Box, CardContent, CardMedia, Typography } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { Link } from 'react-router-dom';
-import { demoProfilePicture } from '../utils/Constants';
+import React from "react";
+import { Link } from "react-router-dom";
+import { Typography, Card, CardContent, CardMedia } from "@mui/material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
-const ChannelCard = ({ channelDetail, marginTop }) => (
-  <Box
-    sx={{
-      boxShadow: 'none',
-      borderRadius: '20px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: { xs: '356px', md: '320px' },
-      height: '326px',
-      margin: 'auto',
-      marginTop,
-    }}
-  >
-    <Link to={`/channel/${channelDetail?.id?.channelId}`}>
-      <CardContent sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', textAlign: 'center', color: '#fff' }}>
+import { demoThumbnailUrl, demoChannelUrl, demoChannelTitle } from "../utils/Constants";
+
+const ChannelCard = ({ channelDetail }) => {
+  const channelId = channelDetail?.channel_name; 
+  const thumbnail = channelDetail?.thumbnail; 
+  const channelTitle = channelDetail?.channel_title;
+
+  return (
+    <Card
+      sx={{
+        width: { xs: "100%", sm: "358px", md: "320px" },
+        boxShadow: "none",
+        borderRadius: "10px",
+        backgroundColor: "#1E1E1E",
+        transition: "transform 0.3s, box-shadow 0.3s",
+        "&:hover": {
+          transform: "scale(1.05)",
+          boxShadow: "0 8px 16px rgba(0, 0, 0, 0.3)",
+        },
+      }}
+    >
+      <Link to={channelId ? `/channel/${channelId}` : demoChannelUrl} style={{ textDecoration: "none" }}>
         <CardMedia
-          image={channelDetail?.snippet?.thumbnails?.high?.url || demoProfilePicture}
-          alt={channelDetail?.snippet?.title}
-          sx={{ borderRadius: '50%', height: '180px', width: '180px', mb: 2, border: '1px solid #e3e3e3' }}
+          image={thumbnail || demoThumbnailUrl}
+          alt={channelTitle}
+          sx={{
+            width: { xs: "100%", sm: "358px" },
+            height: 180,
+            borderRadius: "10px 10px 0 0",
+            objectFit: "cover",
+          }}
         />
-        <Typography variant="h6">
-          {channelDetail?.snippet?.title}{' '}
-          <CheckCircleIcon sx={{ fontSize: '14px', color: 'gray', ml: '5px' }} />
-        </Typography>
-        {channelDetail?.statistics?.subscriberCount && (
-          <Typography sx={{ fontSize: '15px', fontWeight: 500, color: 'gray' }}>
-            {parseInt(channelDetail?.statistics?.subscriberCount).toLocaleString('en-US')} Subscribers
+        <CardContent sx={{ textAlign: "center" }}>
+          <Typography variant="subtitle1" fontWeight="bold" color="#FFF">
+            {channelTitle || demoChannelTitle}
+            <CheckCircleIcon sx={{ fontSize: "12px", color: "gray", ml: "5px" }} />
           </Typography>
-        )}
-      </CardContent>
-    </Link>
-  </Box>
-);
+        </CardContent>
+      </Link>
+    </Card>
+  );
+};
 
 export default ChannelCard;
